@@ -3,7 +3,7 @@ import Sequelize, { Model } from "sequelize";
 /**
  * type: Se é um valor de crédito ou débito, 1 para crédito ou 2 para débito
  */
-class JournalEntry extends Model {
+class Entry extends Model {
    static init(sequelize) {
       super.init(
          {
@@ -49,4 +49,4 @@ class JournalEntry extends Model {
    }
 }
 
-export default JournalEntry;
+export default Entry;

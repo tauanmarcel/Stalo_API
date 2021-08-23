@@ -1,16 +1,21 @@
-import JournalEntry from "../models/JournalEntry";
+import Entry from "../models/Entry";
 import Category from "../models/Category";
 import GroupControll from "../models/GroupControll";
 
-class JournalEntryController {
-   async index(_, res) {
-      const journalEntries = await JournalEntry.findAll({
+class EntryController {
+   async show(req, res) {
+      const { groupId } = req.params;
+
+      const entries = await Entry.findAll({
          attributes: ["id","description","value","type"],
          include: [
             {
                model: GroupControll,
                as: "group_controll",
-               attributes: ["title"],
+               attributes: ["id", "title"],
+               where: {
+                  id: groupId
+               }
             },
             {
                model: Category,
@@ -21,18 +26,7 @@ class JournalEntryController {
          order: [["id", "asc"]],
       });
 
-      const income = [];
-      const expense = [];
-
-      journalEntries.forEach( e => {
-         if (e.type == 1) {
-            income.push(e);
-         } else {
-            expense.push(e);
-         }
-      })
-
-      return res.status(200).json({income, expense});
+      return res.status(200).json(entries);
    }
 
    async create(req, res) {
@@ -83,4 +77,4 @@ class JournalEntryController {
    }
 }
 
-export default new JournalEntryController();
+export default new EntryController();

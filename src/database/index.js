@@ -4,9 +4,9 @@ import databaseConfig from "../config/database";
 import FinanceControll from "../app/models/FinanceControll";
 import GroupControll from "../app/models/GroupControll";
 import Category from "../app/models/Category";
-import JournalEntry from "../app/models/JournalEntry";
+import Entry from "../app/models/Entry";
 
-const models = [FinanceControll, GroupControll, Category, JournalEntry];
+const models = [FinanceControll, GroupControll, Category, Entry];
 
 class Database {
    constructor() {
