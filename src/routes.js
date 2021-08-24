@@ -12,7 +12,7 @@ routes.get('/finance-controll', FinanceControllController.index);
 routes.get('/group-controll/:financeControllId', GroupControllController.show);
 
 routes.post('/category', CategoryController.create);
-routes.get('/category', CategoryController.index);
+routes.get('/category/:groupId', CategoryController.show);
 
 routes.post('/entry', EntryController.create);
 routes.get('/entry/:groupId', EntryController.show);
