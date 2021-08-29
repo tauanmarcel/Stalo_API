@@ -12,9 +12,11 @@ routes.get('/finance-controll', FinanceControllController.index);
 routes.get('/group-controll/:financeControllId', GroupControllController.show);
 
 routes.post('/category', CategoryController.create);
+routes.get('/get-category/:id', CategoryController.get);
 routes.get('/category/:groupId', CategoryController.show);
 
 routes.post('/entry', EntryController.create);
 routes.get('/entry/:groupId', EntryController.show);
+routes.get('/entry/:groupId/:categoryId', EntryController.details);
 
 export default routes;

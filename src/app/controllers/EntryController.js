@@ -2,6 +2,9 @@ import Entry from "../models/Entry";
 import Category from "../models/Category";
 import GroupControll from "../models/GroupControll";
 
+import { Sequelize } from 'sequelize';
+import * as database from '../../config/database';
+
 class EntryController {
    async show(req, res) {
       const { groupId } = req.params;
@@ -20,13 +23,33 @@ class EntryController {
             {
                model: Category,
                as: "category",
-               attributes: ["title"],
+               attributes: ["id", "title"],
             },
          ],
          order: [["id", "asc"]],
       });
 
       return res.status(200).json(entries);
+   }
+
+   async details(req, res) {
+      const { groupId, categoryId } = req.params;
+      const sequelize = new Sequelize(database);
+
+      const response = await sequelize.query(`select e.id, e.description, e.value from entries e inner join group_controlls gc on gc.id = e.group_controll_id inner join categories c on	c.id = e.category_id where group_controll_id = ${groupId} and category_id = ${categoryId}`,
+         { type: sequelize.QueryTypes.SELECT }
+      );
+
+      if (!response) {
+         return res.status(400).json({ error: 'Detail not found' });
+      }
+
+      const detail = response.map(res => {
+         const parseValue = res.value.toLocaleString('pt-br',{style: 'currency', currency: 'BRL'})
+         return {...res, parseValue}
+      })
+
+      return res.status(200).json(detail);
    }
 
    async create(req, res) {
