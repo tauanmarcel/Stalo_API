@@ -25,6 +25,20 @@ class FinanceControllController {
       return res.status(200).json(parseFinanceControll);
    }
 
+   async get(req, res) {
+      const { id } = req.params;
+
+      if (!id) {
+         return res.status(400).json({error: 'Invalid param'})
+      }
+
+      const financeControll = await FinanceControll.findByPk(id, {
+         attributes: ['id', 'title']
+      });
+
+      return res.status(200).json(financeControll);
+   }
+
    async create(req, res) {
       const { title } = req.body;
 
@@ -33,6 +47,25 @@ class FinanceControllController {
       }
 
       const financeControll = await FinanceControll.create({ title });
+
+      return res.status(200).json(financeControll);
+   }
+
+   async update(req, res) {
+      const { id } = req.params;
+      const { title } = req.body;
+
+      if (!id) {
+         return res.status(400).json({ error: 'Finance Controll not find' });
+      }
+
+      if (!title) {
+         return res.status(400).json({ error: 'The invalid title' });
+      }
+
+      const financeControll = await FinanceControll.findByPk(id);
+
+      financeControll.update({title});
 
       return res.status(200).json(financeControll);
    }

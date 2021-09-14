@@ -25,6 +25,39 @@ class GroupController {
 
       return res.status(200).json(parseGroupControll);
    }
+
+   async get(req, res) {
+      const { id } = req.params;
+
+      if (!id) {
+         return res.status(400).json({error: 'Invalid param'})
+      }
+
+      const groupControll = await GroupControll.findByPk(id, {
+         attributes: ['id', 'title']
+      });
+
+      return res.status(200).json(groupControll);
+   }
+
+   async update(req, res) {
+      const { id } = req.params;
+      const { title } = req.body;
+
+      if (!id) {
+         return res.status(400).json({ error: 'Group Controll not find' });
+      }
+
+      if (!title) {
+         return res.status(400).json({ error: 'The invalid title' });
+      }
+
+      const groupControll = await GroupControll.findByPk(id);
+
+      groupControll.update({title});
+
+      return res.status(200).json(groupControll);
+   }
 }
 
 export default new GroupController();

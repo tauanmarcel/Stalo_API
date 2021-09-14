@@ -7,9 +7,13 @@ import EntryController from './app/controllers/EntryController';
 const routes = new Router();
 
 routes.post('/finance-controll', FinanceControllController.create);
+routes.put('/finance-controll/:id', FinanceControllController.update);
 routes.get('/finance-controll', FinanceControllController.index);
+routes.get('/finance-controll/:id', FinanceControllController.get);
 
+routes.put('/group-controll/:id', GroupControllController.update);
 routes.get('/group-controll/:financeControllId', GroupControllController.show);
+routes.get('/get-group-controll/:id', GroupControllController.get);
 
 routes.post('/category', CategoryController.create);
 routes.get('/get-category/:id', CategoryController.get);
