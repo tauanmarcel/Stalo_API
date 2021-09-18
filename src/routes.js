@@ -20,6 +20,8 @@ routes.get('/get-category/:id', CategoryController.get);
 routes.get('/category/:groupId', CategoryController.show);
 
 routes.post('/entry', EntryController.create);
+routes.put('/entry/:id', EntryController.update);
+routes.get('/get-entry/:id', EntryController.get);
 routes.get('/entry/:groupId', EntryController.show);
 routes.get('/entry/:groupId/:categoryId', EntryController.details);
 

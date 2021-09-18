@@ -32,6 +32,20 @@ class EntryController {
       return res.status(200).json(entries);
    }
 
+   async get(req, res) {
+      const { id } = req.params;
+
+      if (!id) {
+         return res.status(400).json({error: 'Invalid param'})
+      }
+
+      const entry = await Entry.findByPk(id, {
+         attributes: ['id', 'description']
+      });
+
+      return res.status(200).json(entry);
+   }
+
    async details(req, res) {
       const { groupId, categoryId } = req.params;
       const sequelize = new Sequelize(database);
@@ -97,6 +111,25 @@ class EntryController {
       });
 
       return res.status(200).json(journalEntry);
+   }
+
+   async update(req, res) {
+      const { id } = req.params;
+      const { description } = req.body;
+
+      if (!id) {
+         return res.status(400).json({ error: 'Entry not find' });
+      }
+
+      if (!description) {
+         return res.status(400).json({ error: 'The invalid description' });
+      }
+
+      const entry = await Entry.findByPk(id);
+
+      entry.update({description});
+
+      return res.status(200).json(entry);
    }
 }
 
