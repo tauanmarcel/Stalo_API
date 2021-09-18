@@ -10,6 +10,7 @@ routes.post('/finance-controll', FinanceControllController.create);
 routes.put('/finance-controll/:id', FinanceControllController.update);
 routes.get('/finance-controll', FinanceControllController.index);
 routes.get('/finance-controll/:id', FinanceControllController.get);
+routes.delete('/finance-controll/:id', FinanceControllController.delete);
 
 routes.put('/group-controll/:id', GroupControllController.update);
 routes.get('/group-controll/:financeControllId', GroupControllController.show);

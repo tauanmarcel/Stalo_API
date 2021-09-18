@@ -8,7 +8,7 @@ class GroupController {
       const { financeControllId } = req.params;
       const sequelize = new Sequelize(database);
 
-      const groupControll = await sequelize.query(`select gc.id, gc.title, sum(case when type = 1 then e.value else e.value * -1 end) as balance from entries e inner join group_controlls gc on gc.id = e.group_controll_id inner join finance_controlls fc on fc.id = gc.finance_controll_id where fc.id = ${financeControllId} group by gc.id, gc.title order by gc.id`,
+      const groupControll = await sequelize.query(`select gc.id, gc.title,	sum(case when e.value is null then 0 when type = 1 then e.value else e.value * -1 end) as balance from group_controlls gc inner join finance_controlls fc on fc.id = gc.finance_controll_id left join entries e on e.group_controll_id = gc.id where fc.id = ${financeControllId} group by gc.id,	gc.title order by gc.id`,
          { type: sequelize.QueryTypes.SELECT }
       );
 

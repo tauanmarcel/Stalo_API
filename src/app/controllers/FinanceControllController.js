@@ -1,4 +1,5 @@
 import FinanceControll from "../models/FinanceControll";
+import GroupControll from "../models/GroupControll";
 
 import { Sequelize } from 'sequelize';
 import * as database from '../../config/database';
@@ -7,7 +8,7 @@ class FinanceControllController {
    async index(_, res) {
       const sequelize = new Sequelize(database);
 
-      const financeControll = await sequelize.query("SELECT	fc.id, fc.title, sum(case when type = 1 then e.value else e.value * -1 end) as balance from entries e inner join group_controlls gc on gc.id = e.group_controll_id inner join finance_controlls fc on fc.id = gc.finance_controll_id group by fc.id, fc.title order by fc.id",
+      const financeControll = await sequelize.query("select fc.id, fc.title,	sum(case when e.value is null then 0 when type = 1 then e.value else e.value * -1 end) as balance from finance_controlls fc left join group_controlls gc on	gc.finance_controll_id = fc.id left join entries e on e.group_controll_id = gc.id group by fc.id, fc.title order by	fc.title",
          { type: sequelize.QueryTypes.SELECT }
       );
 
@@ -55,8 +56,8 @@ class FinanceControllController {
       const { id } = req.params;
       const { title } = req.body;
 
-      if (!id) {
-         return res.status(400).json({ error: 'Finance Controll not find' });
+      if (!Number(id)) {
+         return res.status(400).json({ error: 'Invalid param id' });
       }
 
       if (!title) {
@@ -65,9 +66,36 @@ class FinanceControllController {
 
       const financeControll = await FinanceControll.findByPk(id);
 
+      if (!financeControll) {
+         return res.status(400).json({ error: 'Finance Controll not find' });
+      }
+
       financeControll.update({title});
 
       return res.status(200).json(financeControll);
+   }
+
+   async delete(req, res) {
+      const { id } = req.params;
+
+      if (!Number(id)) {
+         return res.status(400).json({ error: 'Invalid param id' });
+      }
+
+      const financeControll = await FinanceControll.findByPk(id);
+
+      if (!financeControll) {
+         return res.status(400).json({ error: 'Finance Controll not find' });
+      }
+
+      financeControll.destroy();
+      GroupControll.destroy({
+         where: {
+            finance_controll_id: id
+         }
+      });
+
+      return res.status(200).json({message: 'Finance Controll has be deleted'});
    }
 }
 
