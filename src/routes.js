@@ -12,9 +12,11 @@ routes.get('/finance-controll', FinanceControllController.index);
 routes.get('/finance-controll/:id', FinanceControllController.get);
 routes.delete('/finance-controll/:id', FinanceControllController.delete);
 
+routes.post('/group-controll', GroupControllController.create);
 routes.put('/group-controll/:id', GroupControllController.update);
 routes.get('/group-controll/:financeControllId', GroupControllController.show);
 routes.get('/get-group-controll/:id', GroupControllController.get);
+routes.delete('/group-controll/:id', GroupControllController.delete);
 
 routes.post('/category', CategoryController.create);
 routes.get('/get-category/:id', CategoryController.get);

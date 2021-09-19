@@ -1,4 +1,5 @@
 import GroupControll from "../models/GroupControll";
+import Entry from "../models/Entry";
 
 import { Sequelize } from 'sequelize';
 import * as database from '../../config/database';
@@ -40,6 +41,25 @@ class GroupController {
       return res.status(200).json(groupControll);
    }
 
+   async create(req, res) {
+      const { title, finance_controll_id } = req.body;
+
+      if (!title) {
+         return res.status(400).json({ error: 'The invalid title' });
+      }
+
+      if (!finance_controll_id) {
+         return res.status(400).json({ error: 'The invalid Finance Controll' });
+      }
+
+      const groupControll = await GroupControll.create({ 
+         title, 
+         finance_controll_id 
+      });
+
+      return res.status(200).json(groupControll);
+   }
+
    async update(req, res) {
       const { id } = req.params;
       const { title } = req.body;
@@ -57,6 +77,29 @@ class GroupController {
       groupControll.update({title});
 
       return res.status(200).json(groupControll);
+   }
+
+   async delete(req, res) {
+      const { id } = req.params;
+
+      if (!Number(id)) {
+         return res.status(400).json({ error: 'Invalid param id' });
+      }
+
+      const groupControll = await GroupControll.findByPk(id);
+
+      if (!groupControll) {
+         return res.status(400).json({ error: 'Group Controll not find' });
+      }
+
+      groupControll.destroy();
+      Entry.destroy({
+         where: {
+            group_controll_id: id
+         }
+      });
+
+      return res.status(200).json({message: 'Group Controll has be deleted'});
    }
 }
 
