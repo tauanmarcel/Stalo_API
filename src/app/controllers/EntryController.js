@@ -96,21 +96,23 @@ class EntryController {
          return res.status(400).json({ error: "Group Controll not found" });
       }
 
-      const category = await Category.findByPk(categoryId);
+      if (categoryId) {
+         const category = await Category.findByPk(categoryId);
 
-      if (!category) {
-         return res.status(400).json({ error: "Category not found" });
+         if (!category) {
+            return res.status(400).json({ error: "Category not found" });
+         }
       }
 
-      const journalEntry = await JournalEntry.create({
+      const entry = await Entry.create({
          description,
          value,
          type,
          group_controll_id: groupControllId,
-         category_id: categoryId,
+         category_id: categoryId || 0
       });
 
-      return res.status(200).json(journalEntry);
+      return res.status(200).json(entry);
    }
 
    async update(req, res) {

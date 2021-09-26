@@ -4,6 +4,14 @@ import { Sequelize } from 'sequelize';
 import * as database from '../../config/database';
 
 class CategoryController {
+   async list(_, res) {
+      const category = await Category.findAll({
+         attributes: ['id', 'title', 'description', 'percentage']
+      });
+
+      return res.status(200).json(category);
+   }
+
    async get(req, res) {
       const { id } = req.params;
       const category = await Category.findByPk(id, {

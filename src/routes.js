@@ -20,6 +20,7 @@ routes.delete('/group-controll/:id', GroupControllController.delete);
 
 routes.post('/category', CategoryController.create);
 routes.get('/get-category/:id', CategoryController.get);
+routes.get('/category', CategoryController.list);
 routes.get('/category/:groupId', CategoryController.show);
 
 routes.post('/entry', EntryController.create);

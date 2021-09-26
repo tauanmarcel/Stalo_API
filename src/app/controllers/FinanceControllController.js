@@ -1,5 +1,6 @@
 import FinanceControll from "../models/FinanceControll";
 import GroupControll from "../models/GroupControll";
+import Entry from "../models/Entry";
 
 import { Sequelize } from 'sequelize';
 import * as database from '../../config/database';
@@ -88,12 +89,25 @@ class FinanceControllController {
          return res.status(400).json({ error: 'Finance Controll not find' });
       }
 
+      const groupsControll = await GroupControll.findAll({
+         where: {
+            finance_controll_id: id
+         }
+      });
+
+      const arrayGroupsId = groupsControll.map(group => group.id);
+
       financeControll.destroy();
       GroupControll.destroy({
          where: {
             finance_controll_id: id
          }
       });
+      Entry.destroy({
+         where: {
+            group_controll_id: arrayGroupsId
+         }
+      })
 
       return res.status(200).json({message: 'Finance Controll has be deleted'});
    }
